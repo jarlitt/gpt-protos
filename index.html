@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A/B Test Card</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 40px;
+}
+.card {
+  width: 300px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  height: 50px;
+  transition: height 0.4s;
+}
+.card-content {
+  padding: 10px;
+}
+.card.expanded {
+  height: 150px;
+}
+/* Timing variants */
+.ease-out {
+  transition-timing-function: ease-out;
+}
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+</style>
+</head>
+<body>
+<h1 id="variant-title"></h1>
+<div id="card" class="card">
+  <div class="card-content">
+    <h2>Card Title</h2>
+    <p>Este es un ejemplo de contenido dentro de la tarjeta.</p>
+  </div>
+</div>
+<script>
+(function() {
+  var card = document.getElementById('card');
+  var title = document.getElementById('variant-title');
+
+  // Persist variant across reloads during the session
+  var variant = sessionStorage.getItem('ab_variant');
+  if (!variant) {
+    variant = Math.random() < 0.5 ? 'A' : 'B';
+    sessionStorage.setItem('ab_variant', variant);
+  }
+
+  // Apply variant specific timing function
+  if (variant === 'A') {
+    card.classList.add('ease-out');
+  } else {
+    card.classList.add('ease-in-out');
+  }
+  title.textContent = 'Variant ' + variant;
+
+  card.addEventListener('click', function() {
+    card.classList.toggle('expanded');
+  });
+})();
+</script>
+</body>
+</html>
